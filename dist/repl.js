@@ -1,15 +1,9 @@
-import Readline from "node:readline";
-import { getCommands } from "./commandRegistory.js";
 // ts
 export function cleanInput(input) {
     return input.trim().toLowerCase().split(/\s+/).filter(Boolean);
 }
-const REPLinterface = Readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-    prompt: "Pokedex > ",
-});
-export function startREPL() {
+export function startREPL(state) {
+    const REPLinterface = state.rl_Interface;
     REPLinterface.prompt();
     REPLinterface.on("line", (line) => {
         const cleaned = cleanInput(line);
@@ -18,9 +12,8 @@ export function startREPL() {
             return;
         }
         const command = cleaned[0];
-        const allCommands = getCommands();
-        if (allCommands[command]) {
-            allCommands[command].callback(allCommands);
+        if (state.allCommands[command]) {
+            state.allCommands[command].callback(state);
         }
         else {
             console.log(`Unknown command`);

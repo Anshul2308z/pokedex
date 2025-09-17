@@ -1,7 +1,7 @@
-export function helpCommand(commands) {
+export function helpCommand(state) {
     const usage = [];
-    for (const cmd in commands) {
-        usage.push(`${commands[cmd].name}: ${commands[cmd].description}`);
+    for (const cmd in state.allCommands) {
+        usage.push(`${state.allCommands[cmd].name}: ${state.allCommands[cmd].description}`);
     }
     console.log(`Welcome to the Pokedex!
 Usage:
