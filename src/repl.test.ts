@@ -1,23 +1,40 @@
-import { cleanInput } from "./repl.js";
 
-import { describe, test, expect } from "vitest";
+import { describe, expect, test } from "vitest";
+import { Cache } from "./pokecache.js";
 
-describe.each([
-  {
-    input: "  hello  world  ",
-    expected: ["hello", "world"],
-  },
-  // TODO: more test cases here
-])("cleanInput($input)", ({ input, expected }) => {
-  test(`Expected: ${expected}`, () => {
-    // TODO: call cleanInput with the input here
-    const actual = cleanInput(input);
-    // The `expect` and `toHaveLength` functions are from vitest
-    // they will fail the test if the condition is not met
-    expect(actual).toHaveLength(expected.length);
-    for (const i in expected) {
-      // likewise, the `toBe` function will fail the test if the values are not equal
-      expect(actual[i]).toBe(expected[i]);
-    }
+describe("Cache (student version)", () => {
+  test.concurrent.each([
+    { key: "k1", val: { a: 1 }, interval: 150 },
+    { key: "k2", val: "str", interval: 200 },
+  ])("add/get and reap after $interval ms", async ({ key, val, interval }) => {
+    const cache = new Cache(interval);
+
+    cache.add(key, val);
+    // get returns the stored value (or undefined)
+    expect(cache.get<typeof val>(key)).toEqual(val);
+
+    // wait past interval so #reap() removes it
+    await new Promise((r) => setTimeout(r, interval + 50));
+    expect(cache.get<typeof val>(key)).toBeUndefined();
+
+    cache.stopReapLoop();
+  });
+
+  test("get returns undefined for missing key", () => {
+    const cache = new Cache(300);
+    expect(cache.get("missing")).toBeUndefined();
+    cache.stopReapLoop();
+  });
+
+  test("stopReapLoop prevents further reaping", async () => {
+    const cache = new Cache(100);
+    cache.add("k", 42);
+
+    // stop timer before it can reap
+    cache.stopReapLoop();
+
+    await new Promise((r) => setTimeout(r, 200));
+    // entry should still be there since loop is stopped
+    expect(cache.get<number>("k")).toBe(42);
   });
 });
