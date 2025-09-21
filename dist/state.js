@@ -1,5 +1,6 @@
 import Readline from "node:readline";
 import { getCommands } from "./commandRegistory.js";
+import { PokeAPI } from "./pokeapi.js";
 export const REPLinterface = Readline.createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -8,6 +9,9 @@ export const REPLinterface = Readline.createInterface({
 export function initState() {
     return {
         rl_Interface: REPLinterface,
-        allCommands: getCommands()
+        allCommands: getCommands(),
+        pokeAPI: new PokeAPI(),
+        nextLocationURL: "",
+        prevLocationURL: ""
     };
 }

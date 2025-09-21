@@ -1,6 +1,6 @@
 import { State } from "./state.js";
 
-export function helpCommand(state : State) {
+export async function helpCommand(state : State) {
 
 const usage:string[] = [];
 for(const cmd in state.allCommands){

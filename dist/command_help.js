@@ -1,4 +1,4 @@
-export function helpCommand(state) {
+export async function helpCommand(state) {
     const usage = [];
     for (const cmd in state.allCommands) {
         usage.push(`${state.allCommands[cmd].name}: ${state.allCommands[cmd].description}`);

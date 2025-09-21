@@ -5,22 +5,27 @@ export function cleanInput(input: string): string[] {
 }
 
 
-export function startREPL(state: State) {
+export async function startREPL(state: State) {
     const REPLinterface = state.rl_Interface;
     REPLinterface.prompt();
 
-    REPLinterface.on("line",(line)=>{
+    REPLinterface.on("line",async (line)=>{
         const cleaned = cleanInput(line);
         if(cleaned.length === 0){
             REPLinterface.prompt();
             return; 
         }
         const command = cleaned[0];
-        if(state.allCommands[command]){
-            state.allCommands[command].callback(state);
-        } else {
-            console.log(`Unknown command`);
-        } 
+        try{
+            if(state.allCommands[command]){
+                await state.allCommands[command].callback(state);
+            } 
+            else {
+                console.log(`Unknown command`);
+            }
+         }catch(err){
+            console.error("Error:", err instanceof Error ? err.message : err);
+        }
         REPLinterface.prompt();
     });
 }
