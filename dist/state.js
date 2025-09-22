@@ -1,5 +1,5 @@
 import Readline from "node:readline";
-import { getCommands } from "./commandRegistory.js";
+import { getCommands } from "./command_Registory.js";
 import { PokeAPI } from "./pokeapi.js";
 export const REPLinterface = Readline.createInterface({
     input: process.stdin,

@@ -15,10 +15,11 @@ export async function startREPL(state: State) {
             REPLinterface.prompt();
             return; 
         }
-        const command = cleaned[0];
+        const [name, ...args] = cleaned;
+        const cmd = state.allCommands[name];
         try{
-            if(state.allCommands[command]){
-                await state.allCommands[command].callback(state);
+            if(cmd){
+                await cmd.callback(state, ...args);
             } 
             else {
                 console.log(`Unknown command`);

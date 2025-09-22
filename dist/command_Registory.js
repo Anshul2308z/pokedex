@@ -2,36 +2,33 @@ import { exitCommand } from "./command_exit.js";
 import { commandExplore } from "./command_explore.js";
 import { helpCommand } from "./command_help.js";
 import { commandMapBack, commandMapForward } from "./command_maps.js";
-import { CLICommand } from "./state.js";
-
-
-export function getCommands(): Record<string,CLICommand>{
+export function getCommands() {
     return {
-        exit:{
+        exit: {
             name: "exit",
             description: "Exits the Pokedex",
             callback: exitCommand
         },
-        help:{
+        help: {
             name: "help",
             description: "Displays a help message",
             callback: helpCommand
         },
-        map:{
+        map: {
             name: "map",
             description: "gives 20 locations/ next 20 if called recursively",
             callback: commandMapForward
         },
-        mapb:{
+        mapb: {
             name: "mapb",
             description: "gets you prev 20 locations",
             callback: commandMapBack
         },
-        explore:{ 
+        explore: {
             name: "explore",
             description: "explore an area by providing that area's name as an argument!",
-            callback : commandExplore
+            callback: commandExplore
         },
         // Add more commands here as needed
-    }
+    };
 }
